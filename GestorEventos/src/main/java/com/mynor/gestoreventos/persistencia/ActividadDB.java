@@ -12,12 +12,6 @@ import com.mynor.gestoreventos.modelos.*;
  */
 public class ActividadDB {
     
-    private final Conexion conexion;
-
-    public ActividadDB() {
-        conexion = new Conexion();
-    }
-    
     public Resultado crearActividad(Actividad actividad){
         return new Resultado<>("", "");
     }

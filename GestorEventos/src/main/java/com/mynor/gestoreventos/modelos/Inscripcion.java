@@ -55,8 +55,4 @@ public class Inscripcion {
     public void setConfirmada(boolean confirmada) {
         this.confirmada = confirmada;
     }
-    
-    public boolean isValid(){
-        return true;
-    }
 }

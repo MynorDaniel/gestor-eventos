@@ -55,8 +55,4 @@ public class Participante {
     public void setInstitucion(String institucion) {
         this.institucion = institucion;
     }
-    
-    public boolean isValid(){
-        return true;
-    }
 }

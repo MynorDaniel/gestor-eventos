@@ -14,11 +14,9 @@ import com.mynor.gestoreventos.persistencia.AsistenciaDB;
 public class AsistenciaServicio {
     
     private final AsistenciaDB asistenciaDB;
-    private final ActividadServicio actividadServicio;
     
     public AsistenciaServicio(){
         asistenciaDB = new AsistenciaDB();
-        actividadServicio = new ActividadServicio();
     }
     
     public Resultado crearAsistencia(Asistencia asistencia){

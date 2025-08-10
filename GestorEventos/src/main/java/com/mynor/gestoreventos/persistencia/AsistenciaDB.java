@@ -12,12 +12,6 @@ import com.mynor.gestoreventos.modelos.*;
  */
 public class AsistenciaDB {
     
-    private final Conexion conexion;
-
-    public AsistenciaDB() {
-        conexion = new Conexion();
-    }
-    
     public Resultado crearAsistencia(Asistencia asistencia){
         return new Resultado<>("", "");
     }

@@ -12,12 +12,6 @@ import com.mynor.gestoreventos.modelos.*;
  */
 public class PagoDB {
     
-    private final Conexion conexion;
-
-    public PagoDB() {
-        conexion = new Conexion();
-    }
-    
     public Resultado crearPago(Pago pago){
         return new Resultado<>("", "");
     }

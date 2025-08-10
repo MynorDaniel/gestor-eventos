@@ -14,13 +14,9 @@ import com.mynor.gestoreventos.persistencia.ActividadDB;
 public class ActividadServicio {
     
     private final ActividadDB actividadDB;
-    private final InscripcionServicio inscripcionServicio;
-    private final ParticipanteServicio participanteServicio;
     
     public ActividadServicio(){
         actividadDB = new ActividadDB();
-        inscripcionServicio = new InscripcionServicio();
-        participanteServicio = new ParticipanteServicio();
     }
     
     public Resultado crearActividad(Actividad actividad){

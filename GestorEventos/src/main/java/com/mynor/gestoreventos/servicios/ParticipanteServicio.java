@@ -15,15 +15,29 @@ import com.mynor.gestoreventos.persistencia.ParticipanteDB;
 public class ParticipanteServicio {
     
     private final ParticipanteDB participanteDB;
-    private final AsistenciaServicio asistenciaServicio;
     
     public ParticipanteServicio(){
         participanteDB = new ParticipanteDB();
-        asistenciaServicio = new AsistenciaServicio();
     }
     
-    public Resultado crearParticipante(Participante participante){
-        return new Resultado<>("", "");
+    public Resultado crearParticipante(String correo, String nombre, String tipo, String institucion){
+        
+        if(!correo.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")){
+            return new Resultado<>("Correo invalido", "");
+        }else if(!nombre.matches("^[A-Za-z]+(\\s[A-Za-z]+)*$") || nombre.length() > 45){
+            return new Resultado<>("Nombre invalido", "");
+        }else if(institucion.length() > 150){
+            return new Resultado<>("Nombre de la institucion demasiado grande", "");
+        }
+        
+        try {
+            TipoParticipante tipoParticipante = TipoParticipante.valueOf(tipo.toUpperCase());
+            Participante participante = new Participante(correo, nombre, tipoParticipante, institucion);
+            return participanteDB.crearParticipante(participante);
+        } catch (IllegalArgumentException e) {
+            return new Resultado<>("Tipo de participante invalido", "");
+        }
+        
     }
     
     public TipoParticipante obtenerTipo(Participante participante){

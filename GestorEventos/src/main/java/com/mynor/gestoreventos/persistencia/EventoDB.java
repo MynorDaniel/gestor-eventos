@@ -12,12 +12,6 @@ import com.mynor.gestoreventos.modelos.*;
  */
 public class EventoDB {
     
-    private final Conexion conexion;
-
-    public EventoDB() {
-        conexion = new Conexion();
-    }
-    
     public Resultado crearEvento(Evento evento){
         return new Resultado<>("", "");
     }

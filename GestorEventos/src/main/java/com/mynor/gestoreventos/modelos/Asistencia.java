@@ -33,8 +33,4 @@ public class Asistencia {
     public void setCorreoParticipante(String correoParticipante) {
         this.correoParticipante = correoParticipante;
     }
-    
-    public boolean isValid(){
-        return true;
-    }
 }

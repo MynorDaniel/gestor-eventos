@@ -6,6 +6,9 @@ package com.mynor.gestoreventos.persistencia;
 
 import com.mynor.gestoreventos.modelos.*;
 import com.mynor.gestoreventos.modelos.enums.TipoParticipante;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  *
@@ -13,14 +16,20 @@ import com.mynor.gestoreventos.modelos.enums.TipoParticipante;
  */
 public class ParticipanteDB {
     
-    private final Conexion conexion;
-
-    public ParticipanteDB() {
-        conexion = new Conexion();
-    }
-    
     public Resultado crearParticipante(Participante participante){
-        return new Resultado<>("", "");
+        String sql = "INSERT INTO participante (correo, nombre, tipo, institucion) VALUES(?, ?, ?, ?)";
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, participante.getCorreo());
+            ps.setString(2, participante.getNombre());
+            ps.setString(3, participante.getTipo().name());
+            ps.setString(4, participante.getInstitucion());
+            ps.executeUpdate();
+            return new Resultado<>("Participante " + participante.getCorreo() + " registrado exitosamente", participante);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return new Resultado<>("Error al registrar al participante", "");
+        }
     }
     
     public TipoParticipante obtenerTipo(Participante participante){

@@ -35,8 +35,4 @@ public class Instruccion {
     public void setParametros(String[] parametros) {
         this.parametros = parametros;
     }
-    
-    public boolean isValid(){
-        return true;
-    }
 }

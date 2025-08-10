@@ -55,8 +55,4 @@ public class Pago {
     public void setMetodoPago(MetodoPago metodoPago) {
         this.metodoPago = metodoPago;
     }
-    
-    public boolean isValid(){
-        return true;
-    }
 }

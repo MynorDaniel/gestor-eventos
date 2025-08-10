@@ -96,8 +96,4 @@ public class Actividad {
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
-    
-    public boolean isValid(){
-        return true;
-    }
 }

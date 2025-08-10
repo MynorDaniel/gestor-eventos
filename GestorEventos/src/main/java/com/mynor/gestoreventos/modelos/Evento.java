@@ -76,8 +76,4 @@ public class Evento {
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
-    
-    public boolean isValid(){
-        return true;
-    }
 }

@@ -14,13 +14,9 @@ import com.mynor.gestoreventos.persistencia.InscripcionDB;
 public class InscripcionServicio {
     
     private final InscripcionDB inscripcionDB;
-    private final EventoServicio eventoServicio;
-    private final PagoServicio pagoServicio;
     
     public InscripcionServicio(){
         inscripcionDB = new InscripcionDB();
-        eventoServicio = new EventoServicio();
-        pagoServicio = new PagoServicio();
     }
     
     public Resultado crearInscripcion(Inscripcion inscripcion){

@@ -12,12 +12,6 @@ import com.mynor.gestoreventos.modelos.*;
  */
 public class InscripcionDB {
     
-    private final Conexion conexion;
-
-    public InscripcionDB() {
-        conexion = new Conexion();
-    }
-    
     public Resultado crearInscripcion(Inscripcion inscripcion){
         return new Resultado<>("", "");
     }
