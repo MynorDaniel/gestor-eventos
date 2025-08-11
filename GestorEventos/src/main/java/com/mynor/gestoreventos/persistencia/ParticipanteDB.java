@@ -8,6 +8,7 @@ import com.mynor.gestoreventos.modelos.*;
 import com.mynor.gestoreventos.modelos.enums.TipoParticipante;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -32,8 +33,23 @@ public class ParticipanteDB {
         }
     }
     
-    public TipoParticipante obtenerTipo(Participante participante){
-        return TipoParticipante.ESTUDIANTE;
+    public TipoParticipante obtenerTipo(String correoParticipante){
+        String sql = "SELECT tipo FROM participante WHERE correo = ?";
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, correoParticipante);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                TipoParticipante tipo = TipoParticipante.valueOf(rs.getString("tipo"));
+                return tipo;
+            }else{
+                return null;
+            }
+            
+        } catch (SQLException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
     
     public Resultado obtenerParticipantes(String evento, String tipoParticipante, String institucion){

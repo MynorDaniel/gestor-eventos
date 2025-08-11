@@ -40,8 +40,8 @@ public class ParticipanteServicio {
         
     }
     
-    public TipoParticipante obtenerTipo(Participante participante){
-        return TipoParticipante.ESTUDIANTE;
+    public TipoParticipante obtenerTipo(String correoParticipante){
+        return participanteDB.obtenerTipo(correoParticipante);
     }
     
     public Resultado obtenerParticipantes(String evento, String tipoParticipante, String institucion){
