@@ -24,7 +24,8 @@ public class PagoServicio {
     public Resultado crearPago(String codigoEvento, String correoParticipante, String monto, String metodoPagoParam){
         
         boolean correoValido = correoParticipante.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
-        boolean montoValido = monto.matches("^(?!0\\.00$)(\\d+)\\.\\d{2}$");
+        boolean montoValido = monto.matches("^(?!0+\\.00$)(\\d+)\\.\\d{2}$");
+        
         
         if(!correoValido){
             return new Resultado<>("Correo del participante invalido", "");
@@ -43,7 +44,7 @@ public class PagoServicio {
         }
     }
     
-    public boolean existePago(Pago pago){
-        return true;
+    public boolean existePago(String codigoEvento, String correoParticipante){
+        return pagoDB.existePago(codigoEvento, correoParticipante);
     }
 }
