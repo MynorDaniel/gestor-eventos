@@ -7,6 +7,7 @@ package com.mynor.gestoreventos.persistencia;
 import com.mynor.gestoreventos.modelos.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -36,8 +37,25 @@ public class InscripcionDB {
         }
     }
     
-    public Resultado confirmarInscripcion(Inscripcion inscripcion){
-        return new Resultado<>("", "");
+    public Resultado confirmarInscripcion(String codigoEvento, String correoParticipante){
+        String sql = "UPDATE inscripcion SET confirmada = TRUE WHERE codigo_evento = ? AND correo_participante = ?";
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, codigoEvento);
+            ps.setString(2, correoParticipante);
+            
+            int columnasAfectadas = ps.executeUpdate();
+            
+            if(columnasAfectadas>0){
+                return new Resultado<>("Inscripcion confirmada", "");
+            }else{
+                return new Resultado<>("Error al confirmar la inscripcion de " + correoParticipante + " a " + codigoEvento, "");
+            }
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return new Resultado<>("Error al confirmar la inscripcion", "");
+        }
     }
 
     public boolean existeInscripcion(String codigoEvento, String correoParticipante) {
