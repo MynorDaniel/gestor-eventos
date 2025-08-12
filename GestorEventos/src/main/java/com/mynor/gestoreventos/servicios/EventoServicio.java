@@ -56,8 +56,8 @@ public class EventoServicio {
         }
     }
     
-    public boolean hayCupo(Evento evento){
-        return true;
+    public boolean hayCupo(String codigo){
+        return eventoDB.hayCupo(codigo);
     }
     
     public Resultado obtenerEventos(String tipoEvento, String fechaInicial, String fechaFinal,

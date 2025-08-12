@@ -14,14 +14,15 @@ import com.mynor.gestoreventos.servicios.*;
 public class GestorEventos {
 
     public static void main(String[] args) {
-        PagoServicio is = new PagoServicio();
+        //PagoServicio is = new PagoServicio();
         //InscripcionServicio is = new InscripcionServicio();
+        EventoServicio es = new EventoServicio();
         
         String codigo = "EVT-100";
-        String correo = "mynordma@gmail.com";
-
-        Resultado r = is.crearPago(codigo, correo, "100", "tarjeta");
-        System.out.println(r.getMensaje());
+        //String correo = "mynordma@gmail.com";
+        
+        boolean hayCupo = es.hayCupo(codigo);
+        System.out.println(hayCupo);
         
     }
 }

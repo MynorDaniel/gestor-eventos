@@ -8,6 +8,7 @@ import com.mynor.gestoreventos.modelos.*;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -41,7 +42,54 @@ public class EventoDB {
     }
     
     public boolean hayCupo(String codigoEvento){
-        return true;
+        String sqlCuposApartados = """
+                                   SELECT COUNT(*) AS cupos_apartados 
+                                   FROM inscripcion i 
+                                   INNER JOIN pago p 
+                                    ON i.codigo_evento = p.codigo_evento 
+                                    AND i.correo_participante = p.correo_participante 
+                                   WHERE i.codigo_evento = ?
+                                   """;
+        
+        int cuposApartados = 0;
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sqlCuposApartados)){
+            ps.setString(1, codigoEvento);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                cuposApartados = rs.getInt("cupos_apartados");
+            }else{
+                return false;
+            }
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+        
+        String sqlCupoMaximo = "SELECT cupo_maximo FROM evento WHERE codigo = ?";
+        
+        int cupoMaximo = 0;
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sqlCupoMaximo)){
+            ps.setString(1, codigoEvento);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                cupoMaximo = rs.getInt("cupo_maximo");
+            }else{
+                return false;
+            }
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+        
+        return cuposApartados < cupoMaximo;
     }
     
     public Resultado obtenerEventos(String tipoEvento, String fechaInicial, String fechaFinal,
