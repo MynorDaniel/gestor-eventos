@@ -4,10 +4,8 @@
 
 package com.mynor.gestoreventos;
 
-import com.mynor.gestoreventos.modelos.Resultado;
-import com.mynor.gestoreventos.modelos.enums.TipoParticipante;
-import com.mynor.gestoreventos.servicios.EventoServicio;
-import com.mynor.gestoreventos.servicios.ParticipanteServicio;
+import com.mynor.gestoreventos.modelos.*;
+import com.mynor.gestoreventos.servicios.*;
 
 /**
  *
@@ -16,16 +14,13 @@ import com.mynor.gestoreventos.servicios.ParticipanteServicio;
 public class GestorEventos {
 
     public static void main(String[] args) {
-        EventoServicio es = new EventoServicio();
+        InscripcionServicio i = new InscripcionServicio();
         
-        String codigo = "EVT-100";
-        String ubicacion = "Quetgo";
-        String cupoMaximo = "10";
-        String titulo = "Hola";
-        String tipo = "CHARLA";
-        String fecha = "10/10/2013";
+        String codigo = "EVT-10";
+        String correo = "mynordma@gmail.com";
+        String tipo = "TALERISTA";
 
-        Resultado r = es.crearEvento(codigo, ubicacion, cupoMaximo, titulo, tipo, fecha);
+        Resultado r = i.crearInscripcion(codigo, correo, tipo);
         System.out.println(r.getMensaje());
         
     }

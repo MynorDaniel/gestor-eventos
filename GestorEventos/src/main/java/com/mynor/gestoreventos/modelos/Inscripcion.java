@@ -24,6 +24,12 @@ public class Inscripcion {
         this.confirmada = confirmada;
     }
 
+    public Inscripcion(String codigoEvento, String correoParticipante, TipoInscripcion tipo) {
+        this.codigoEvento = codigoEvento;
+        this.correoParticipante = correoParticipante;
+        this.tipo = tipo;
+    }
+
     public String getCodigoEvento() {
         return codigoEvento;
     }

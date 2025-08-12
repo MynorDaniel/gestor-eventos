@@ -40,7 +40,7 @@ public class EventoDB {
         }
     }
     
-    public boolean hayCupo(Evento evento){
+    public boolean hayCupo(String codigoEvento){
         return true;
     }
     
