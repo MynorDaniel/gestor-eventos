@@ -34,7 +34,7 @@ public class AsistenciaServicio {
         return asistenciaDB.crearAsistencia(new Asistencia(codigoActividad, correoParticipante));
     }
     
-    public boolean existeAsistencia(Inscripcion inscripcion){
+    public boolean existeAsistencia(String codigoEvento, String correoParticipante){
         return true;
     }
 }

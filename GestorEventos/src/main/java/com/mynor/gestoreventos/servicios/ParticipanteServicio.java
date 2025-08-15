@@ -48,7 +48,17 @@ public class ParticipanteServicio {
         return new Resultado<>("", "");
     }
     
-    public Resultado generarCertificado(Inscripcion inscripcion){
+    public Resultado generarCertificado(String codigoEvento, String correoParticipante, String ruta){
+        
+        if(!correoParticipante.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")){
+            return new Resultado<>("Correo invalido", "");
+        }else if(!(new AsistenciaServicio().existeAsistencia(codigoEvento, correoParticipante))){
+            return new Resultado<>("El participante " + correoParticipante + " no ha asistido a ninguna actividad de " + codigoEvento, "");
+        }
+        
+        String html = """
+                      
+                      """;
         return null;
     }
 }
