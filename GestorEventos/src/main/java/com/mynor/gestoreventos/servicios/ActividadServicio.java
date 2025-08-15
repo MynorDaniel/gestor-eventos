@@ -32,6 +32,8 @@ public class ActividadServicio {
         
         if(!correoValido){
             return new Resultado<>("Correo invalido", "");
+        }else if(!tituloValido){
+            return new Resultado<>("Titulo demasiado grande", "");
         }
         
         InscripcionServicio inscripcionServicio = new InscripcionServicio();
@@ -64,15 +66,15 @@ public class ActividadServicio {
         
     }
     
-    public boolean hayCupo(Actividad actividad){
-        return true;
-    }
-    
-    public boolean participanteAceptado(Asistencia asistencia){
-        return true;
+    public boolean hayCupo(String codigoActividad){
+        return actividadDB.hayCupo(codigoActividad);
     }
     
     public Resultado obtenerActividades(String evento, String tipoActividad, String correoEncargado){
         return null;
+    }
+
+    public boolean participanteAceptable(String codigoActividad, String correoParticipante) {
+        return actividadDB.participanteAceptable(codigoActividad, correoParticipante);
     }
 }

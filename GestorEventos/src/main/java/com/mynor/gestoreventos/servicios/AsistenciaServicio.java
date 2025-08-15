@@ -19,8 +19,19 @@ public class AsistenciaServicio {
         asistenciaDB = new AsistenciaDB();
     }
     
-    public Resultado crearAsistencia(Asistencia asistencia){
-        return null;
+    public Resultado crearAsistencia(String codigoActividad, String correoParticipante){
+        
+        ActividadServicio actividadServicio = new ActividadServicio();
+        
+        if(!correoParticipante.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")){
+            return new Resultado<>("Correo invalido", "");
+        }else if(!actividadServicio.hayCupo(codigoActividad)){
+            return new Resultado<>("No hay cupos disponibles", "");
+        }else if(!actividadServicio.participanteAceptable(codigoActividad, correoParticipante)){
+            return new Resultado<>("El participante no puede asignarse a esta actividad", "");
+        }
+        
+        return asistenciaDB.crearAsistencia(new Asistencia(codigoActividad, correoParticipante));
     }
     
     public boolean existeAsistencia(Inscripcion inscripcion){

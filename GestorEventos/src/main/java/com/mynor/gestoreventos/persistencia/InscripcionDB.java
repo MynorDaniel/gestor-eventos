@@ -28,7 +28,7 @@ public class InscripcionDB {
             int columnasAfectadas = ps.executeUpdate();
             
             if(columnasAfectadas>0){
-                return new Resultado<>("Inscripcion de " + inscripcion.getCorreoParticipante() + " al evento " + inscripcion.getCodigoEvento()+ " registrado exitosamente", inscripcion);
+                return new Resultado<>("Inscripcion de " + inscripcion.getCorreoParticipante() + " al evento " + inscripcion.getCodigoEvento()+ " registrada exitosamente", inscripcion);
             }else{
                 return new Resultado<>("Error al registrar la inscripcion", "");
             }
