@@ -51,45 +51,38 @@ public class EventoDB {
                                    WHERE i.codigo_evento = ?
                                    """;
         
-        int cuposApartados = 0;
-        
-        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sqlCuposApartados)){
-            ps.setString(1, codigoEvento);
-            
-            ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()){
-                cuposApartados = rs.getInt("cupos_apartados");
-            }else{
-                return false;
-            }
-            
-        }catch(SQLException e){
-            System.out.println(e.getMessage());
-            return false;
-        }
-        
         String sqlCupoMaximo = "SELECT cupo_maximo FROM evento WHERE codigo = ?";
         
+        int cuposApartados = 0;
         int cupoMaximo = 0;
         
-        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sqlCupoMaximo)){
-            ps.setString(1, codigoEvento);
+        try(Connection conn = Conexion.obtenerConexion(); 
+                PreparedStatement ps1 = conn.prepareStatement(sqlCuposApartados); 
+                PreparedStatement ps2 = conn.prepareStatement(sqlCupoMaximo)){
             
-            ResultSet rs = ps.executeQuery();
-            
-            if(rs.next()){
-                cupoMaximo = rs.getInt("cupo_maximo");
+            ps1.setString(1, codigoEvento);
+            ResultSet rs1 = ps1.executeQuery();
+            if(rs1.next()){
+                cuposApartados = rs1.getInt("cupos_apartados");
             }else{
                 return false;
             }
+            
+            ps2.setString(1, codigoEvento);
+            ResultSet rs2 = ps2.executeQuery();
+            if(rs2.next()){
+                cupoMaximo = rs2.getInt("cupo_maximo");
+            }else{
+                return false;
+            }
+            
+            return cuposApartados < cupoMaximo;
             
         }catch(SQLException e){
             System.out.println(e.getMessage());
             return false;
         }
         
-        return cuposApartados < cupoMaximo;
     }
     
     public Resultado obtenerEventos(String tipoEvento, String fechaInicial, String fechaFinal,

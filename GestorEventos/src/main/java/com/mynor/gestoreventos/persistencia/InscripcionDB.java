@@ -5,6 +5,7 @@
 package com.mynor.gestoreventos.persistencia;
 
 import com.mynor.gestoreventos.modelos.*;
+import com.mynor.gestoreventos.modelos.enums.TipoInscripcion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -60,5 +61,25 @@ public class InscripcionDB {
 
     public boolean existeInscripcion(String codigoEvento, String correoParticipante) {
         return true;
+    }
+    
+    public TipoInscripcion obtenerTipo(String correoImpartidor, String codigoEvento){
+        String sql = "SELECT tipo FROM inscripcion WHERE codigo_evento = ? AND correo_participante = ?";
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, codigoEvento);
+            ps.setString(2, correoImpartidor);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                TipoInscripcion tipo = TipoInscripcion.valueOf(rs.getString("tipo"));
+                return tipo;
+            }else{
+                return null;
+            }
+            
+        } catch (SQLException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }

@@ -57,4 +57,8 @@ public class InscripcionServicio {
         
         return inscripcionDB.confirmarInscripcion(codigoEvento, correoParticipante);
     }
+
+    public TipoInscripcion obtenerTipo(String correoImpartidor, String codigoEvento) {
+        return inscripcionDB.obtenerTipo(correoImpartidor, codigoEvento);
+    }
 }
