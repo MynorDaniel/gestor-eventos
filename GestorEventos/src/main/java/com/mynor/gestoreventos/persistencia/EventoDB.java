@@ -5,11 +5,13 @@
 package com.mynor.gestoreventos.persistencia;
 
 import com.mynor.gestoreventos.modelos.*;
+import com.mynor.gestoreventos.modelos.enums.TipoEvento;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 /**
  *
@@ -88,5 +90,28 @@ public class EventoDB {
     public Resultado obtenerEventos(String tipoEvento, String fechaInicial, String fechaFinal,
             String cupoMinimo, String cupoMaximo){
         return new Resultado<>("", "");
+    }
+
+    public Evento obtenerEvento(String codigoEvento) {
+        String sql = "SELECT * FROM evento WHERE codigo = ?";
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, codigoEvento);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                String ubicacion = rs.getString("ubicacion");
+                int cupoMaximo = rs.getInt("cupo_maximo");
+                String titulo = rs.getString("titulo");
+                TipoEvento tipo = TipoEvento.valueOf(rs.getString("tipo"));
+                LocalDate fecha = rs.getDate("fecha").toLocalDate();
+                return new Evento(codigoEvento, ubicacion, cupoMaximo, titulo, tipo, fecha);
+            }else{
+                return null;
+            }
+            
+        } catch (SQLException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }

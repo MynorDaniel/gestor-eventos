@@ -55,4 +55,26 @@ public class ParticipanteDB {
     public Resultado obtenerParticipantes(String evento, String tipoParticipante, String institucion){
         return new Resultado<>("", "");
     }
+
+    public Participante obtenerParticipante(String correoParticipante) {
+        String sql = "SELECT * FROM participante WHERE correo = ?";
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, correoParticipante);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                String correo = rs.getString("correo");
+                String nombre = rs.getString("nombre");
+                TipoParticipante tipo = TipoParticipante.valueOf(rs.getString("tipo"));
+                String institucion = rs.getString("institucion");
+                return new Participante(correo, nombre, tipo, institucion);
+            }else{
+                return null;
+            }
+            
+        } catch (SQLException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }

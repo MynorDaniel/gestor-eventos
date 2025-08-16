@@ -15,22 +15,18 @@ public class GestorEventos {
 
     public static void main(String[] args) {
         //PagoServicio is = new PagoServicio();
-        InscripcionServicio is = new InscripcionServicio();
+        //InscripcionServicio is = new InscripcionServicio();
         //EventoServicio es = new EventoServicio();
         //ActividadServicio as = new ActividadServicio();
-        AsistenciaServicio as = new AsistenciaServicio();
+        //AsistenciaServicio as = new AsistenciaServicio();
+        ParticipanteServicio ps = new ParticipanteServicio();
         
-        String codigoActividad = "ACT-001";
-        String correoImpartidor = "mynordma@gmail.com";
+        String codigoEvento = "EVT-100";
+        String correo = "mynordma@gmail.com";
         
-        System.out.println("Confirmando asistencia");
-        Resultado r2 = is.confirmarInscripcion("EVT-100", correoImpartidor);
-        System.out.println(r2.getMensaje());
-
-        System.out.println("Asignando a evento");
-        Resultado r = as.crearAsistencia(codigoActividad, correoImpartidor);
+        System.out.println("Creando certificado");
+        Resultado r = ps.generarCertificado(codigoEvento, correo, "reporte-test");
         System.out.println(r.getMensaje());
-        
         
         
     }

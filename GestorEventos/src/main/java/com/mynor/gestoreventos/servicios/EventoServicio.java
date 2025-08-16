@@ -64,5 +64,9 @@ public class EventoServicio {
             String cupoMinimo, String cupoMaximo){
         return new Resultado<>("", "");
     }
+
+    public Evento obtenerEvento(String codigoEvento) {
+        return eventoDB.obtenerEvento(codigoEvento);
+    }
 }
 
