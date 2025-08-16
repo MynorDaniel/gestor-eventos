@@ -33,6 +33,8 @@ public class PagoServicio {
             return new Resultado<>("Monto invalido", "");
         }else if(!(new InscripcionDB().existeInscripcion(codigoEvento, correoParticipante))){
             return new Resultado<>("No existe la inscripcion", "");
+        }else if(codigoEvento.isEmpty()){
+            return new Resultado<>("Codigo invalido", "");
         }
         
         try {

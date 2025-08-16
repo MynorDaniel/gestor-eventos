@@ -7,6 +7,7 @@ package com.mynor.gestoreventos.persistencia;
 import com.mynor.gestoreventos.modelos.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -31,11 +32,30 @@ public class AsistenciaDB {
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());
-            return new Resultado<>("Error al registrar la asistencia", "");
+            return new Resultado<>("Asistencia duplicada, ignorando...", "");
         }
     }
     
-    public boolean existeAsistencia(Inscripcion inscripcion){
-        return true;
+    public boolean existeAsistencia(String codigoEvento, String correoParticipante){
+        String sql = """
+                     SELECT 1
+                     FROM asistencia AS a
+                     JOIN actividad AS ac 
+                         ON a.codigo_actividad = ac.codigo
+                     WHERE ac.codigo_evento = ?
+                       AND a.correo_participante = ?
+                     LIMIT 1;
+                     """;
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, codigoEvento);
+            ps.setString(2, correoParticipante);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+            
+        } catch (SQLException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 }

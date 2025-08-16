@@ -6,11 +6,14 @@ package com.mynor.gestoreventos.servicios;
 
 import com.mynor.gestoreventos.modelos.*;
 import com.mynor.gestoreventos.modelos.enums.TipoParticipante;
+import com.mynor.gestoreventos.modelos.enums.TipoReporte;
 import com.mynor.gestoreventos.persistencia.ParticipanteDB;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
+import java.sql.ResultSet;
 
 /**
  *
@@ -48,8 +51,14 @@ public class ParticipanteServicio {
         return participanteDB.obtenerTipo(correoParticipante);
     }
     
-    public Resultado obtenerParticipantes(String evento, String tipoParticipante, String institucion){
-        return new Resultado<>("", "");
+    public Resultado obtenerParticipantes(String evento, String tipoParticipante, String institucion, String url){
+        
+        if(evento.isEmpty()){
+            return new Resultado<>("Codigo no indicado", "");
+        }
+        
+        return participanteDB.obtenerParticipantes(evento, tipoParticipante, institucion, url);
+        
     }
     
     public Resultado generarCertificado(String codigoEvento, String correoParticipante, String ruta){
@@ -58,6 +67,8 @@ public class ParticipanteServicio {
             return new Resultado<>("Correo invalido", "");
         }else if(!(new AsistenciaServicio().existeAsistencia(codigoEvento, correoParticipante))){
             return new Resultado<>("El participante " + correoParticipante + " no ha asistido a ninguna actividad de " + codigoEvento, "");
+        }else if(codigoEvento.isEmpty()){
+            return new Resultado<>("Codigo invalido", "");
         }
         
         EventoServicio eventoServicio = new EventoServicio();
@@ -130,7 +141,8 @@ public class ParticipanteServicio {
                       """, participante.getNombre(), evento.getTitulo(), evento.getFecha().toString(), evento.getUbicacion());
         
         try {
-            generarHTML(html, ruta, correoParticipante, codigoEvento);
+            Reporte reporte = new Reporte();
+            reporte.generarHTML(html, ruta, "Certificado-" + correoParticipante + "-" + codigoEvento + ".html");
             return new Resultado<>("Certificado generado en la ruta: " + ruta, "");
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
@@ -138,16 +150,4 @@ public class ParticipanteServicio {
         }
     }
     
-    private void generarHTML(String html, String ruta, String correo, String evt)throws IOException{
-        File archivo = new File(ruta + "/Certificado-" + correo + "-" + evt + ".html");
-        File carpeta = archivo.getParentFile();
-
-        if (carpeta != null && !carpeta.exists()) {
-            carpeta.mkdirs();
-        }
-        
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))){
-            bw.write(html);
-        }
-    }
 }

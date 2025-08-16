@@ -25,7 +25,7 @@ public class GestorEventos {
         String correo = "mynordma@gmail.com";
         
         System.out.println("Creando certificado");
-        Resultado r = ps.generarCertificado(codigoEvento, correo, "reporte-test");
+        Resultado r = ps.obtenerParticipantes(codigoEvento, "", "", "ruta");
         System.out.println(r.getMensaje());
         
         

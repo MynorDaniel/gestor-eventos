@@ -29,12 +29,14 @@ public class AsistenciaServicio {
             return new Resultado<>("No hay cupos disponibles", "");
         }else if(!actividadServicio.participanteAceptable(codigoActividad, correoParticipante)){
             return new Resultado<>("El participante no puede asignarse a esta actividad", "");
+        }else if(codigoActividad.isEmpty()){
+            return new Resultado<>("Codigo invalido", "");
         }
         
         return asistenciaDB.crearAsistencia(new Asistencia(codigoActividad, correoParticipante));
     }
     
     public boolean existeAsistencia(String codigoEvento, String correoParticipante){
-        return true;
+        return asistenciaDB.existeAsistencia(codigoEvento, correoParticipante);
     }
 }

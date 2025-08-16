@@ -29,7 +29,9 @@ public class InscripcionServicio {
         boolean hayCupoEnEvento = eventoDB.hayCupo(codigoEvento);
         
         if(!(correoValido && hayCupoEnEvento)){
-            return new Resultado<>("Correo del participante invalido", "");
+            return new Resultado<>("Correo del participante invalido o no hay cupo", "");
+        }else if(codigoEvento.isEmpty()){
+            return new Resultado<>("Codigo invalido", "");
         }
         
         try {
@@ -46,6 +48,8 @@ public class InscripcionServicio {
         
         if(!correoValido){
             return new Resultado<>("Correo del participante invalido", "");
+        }else if(codigoEvento.isEmpty()){
+            return new Resultado<>("Codigo invalido", "");
         }
         
         PagoDB pagoDB = new PagoDB();

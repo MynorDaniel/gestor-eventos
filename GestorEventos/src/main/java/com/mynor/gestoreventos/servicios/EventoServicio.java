@@ -33,6 +33,8 @@ public class EventoServicio {
             return new Resultado<>("Nombre de la ubicacion del evento demasiado grande", "");
         }else if(!tituloValido){
             return new Resultado<>("Titulo demasiado grande", "");
+        }else if(codigo.isEmpty()){
+            return new Resultado<>("Codigo invalido", "");
         }
         
         try {

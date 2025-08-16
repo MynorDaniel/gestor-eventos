@@ -34,6 +34,10 @@ public class ActividadServicio {
             return new Resultado<>("Correo invalido", "");
         }else if(!tituloValido){
             return new Resultado<>("Titulo demasiado grande", "");
+        }else if(codigo.isEmpty()){
+            return new Resultado<>("Codigo invalido", "");
+        }else if(codigoEvento.isEmpty()){
+            return new Resultado<>("Codigo del evento invalido", "");
         }
         
         InscripcionServicio inscripcionServicio = new InscripcionServicio();
