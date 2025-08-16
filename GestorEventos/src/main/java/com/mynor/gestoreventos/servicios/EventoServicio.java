@@ -22,7 +22,7 @@ public class EventoServicio {
         eventoDB = new EventoDB();
     }
     
-    public Resultado crearEvento(String codigo, String ubicacion, String cupoMaximo, String titulo, String tipo, String fecha){
+    public Resultado crearEvento(String codigo, String ubicacion, String cupoMaximo, String titulo, String tipo, String fecha, String precio){
         boolean fechaValida = fecha.matches("^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$");
         boolean ubicacionValida = ubicacion.length() <= 150;
         boolean tituloValido = titulo.length() <= 200;
@@ -48,7 +48,7 @@ public class EventoServicio {
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate fechaEvento = LocalDate.parse(fecha, formato);
             
-            Evento evento = new Evento(codigo, ubicacion, cupo, titulo, tipoEvento, fechaEvento);
+            Evento evento = new Evento(codigo, ubicacion, cupo, titulo, tipoEvento, fechaEvento, Double.parseDouble(precio));
             
             return eventoDB.crearEvento(evento);
             
@@ -69,6 +69,10 @@ public class EventoServicio {
 
     public Evento obtenerEvento(String codigoEvento) {
         return eventoDB.obtenerEvento(codigoEvento);
+    }
+    
+    public double obtenerPrecio(String codigoEvento){
+        return eventoDB.obtenerPrecio(codigoEvento);
     }
 }
 

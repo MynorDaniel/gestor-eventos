@@ -104,7 +104,8 @@ public class EventoDB {
                 String titulo = rs.getString("titulo");
                 TipoEvento tipo = TipoEvento.valueOf(rs.getString("tipo"));
                 LocalDate fecha = rs.getDate("fecha").toLocalDate();
-                return new Evento(codigoEvento, ubicacion, cupoMaximo, titulo, tipo, fecha);
+                double precio = rs.getDouble("precio");
+                return new Evento(codigoEvento, ubicacion, cupoMaximo, titulo, tipo, fecha, precio);
             }else{
                 return null;
             }
@@ -112,6 +113,24 @@ public class EventoDB {
         } catch (SQLException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    public double obtenerPrecio(String codigoEvento) {
+        String sql = "SELECT precio FROM evento WHERE codigo = ?";
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, codigoEvento);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getDouble("precio");
+            }else{
+                return -1;
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return -1;
         }
     }
 }

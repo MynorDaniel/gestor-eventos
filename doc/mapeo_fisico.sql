@@ -23,6 +23,7 @@ CREATE TABLE evento (
     titulo VARCHAR(200) NOT NULL,
     tipo ENUM('CHARLA', 'CONGRESO', 'TALLER', 'DEBATE') NOT NULL,
     fecha DATE NOT NULL,
+    precio DOUBLE DEFAULT 0.00,
     PRIMARY KEY (codigo)
 );
 

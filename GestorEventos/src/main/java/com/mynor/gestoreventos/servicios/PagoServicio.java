@@ -24,20 +24,29 @@ public class PagoServicio {
     public Resultado crearPago(String codigoEvento, String correoParticipante, String monto, String metodoPagoParam){
         
         boolean correoValido = correoParticipante.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
-        boolean montoValido = monto.matches("^(?!0+(\\.0+)?$)\\d+(\\.\\d{1,2})?$");
-        
         
         if(!correoValido){
             return new Resultado<>("Correo del participante invalido", "");
-        }else if(!montoValido){
-            return new Resultado<>("Monto invalido", "");
         }else if(!(new InscripcionDB().existeInscripcion(codigoEvento, correoParticipante))){
             return new Resultado<>("No existe la inscripcion", "");
         }else if(codigoEvento.isEmpty()){
             return new Resultado<>("Codigo invalido", "");
         }
         
+        EventoServicio eventoServicio = new EventoServicio();
+        double precioEvento = eventoServicio.obtenerPrecio(codigoEvento);
+        
+        if(precioEvento < 0){
+            return new Resultado<>("No se pudo obtener el precio del evento", "");
+        }
+        
         try {
+            System.out.println(precioEvento);
+            System.out.println(Double.parseDouble(monto));
+            if(Math.abs(precioEvento - Double.parseDouble(monto)) > 1e-6){
+                return new Resultado<>("El monto no corresponde al precio del evento", "");
+            }
+            
             MetodoPago metodoPago = MetodoPago.valueOf(metodoPagoParam.toUpperCase());
             Pago pago = new Pago(codigoEvento, correoParticipante, Double.parseDouble(monto), metodoPago);
             return pagoDB.crearPago(pago);

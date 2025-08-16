@@ -19,14 +19,23 @@ public class Evento {
     private String titulo;
     private TipoEvento tipo;
     private LocalDate fecha;
+    private double precio;
 
-    public Evento(String codigo, String ubicacion, int cupoMaximo, String titulo, TipoEvento tipo, LocalDate fecha) {
+    public Evento(String codigo, String ubicacion, int cupoMaximo, String titulo, TipoEvento tipo, LocalDate fecha, double precio) {
         this.codigo = codigo;
         this.ubicacion = ubicacion;
         this.cupoMaximo = cupoMaximo;
         this.titulo = titulo;
         this.tipo = tipo;
         this.fecha = fecha;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
     public String getCodigo() {
