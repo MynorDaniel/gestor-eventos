@@ -170,8 +170,8 @@ public class EventoDB {
                     evento.setParticipantes(new LinkedList<>());
                     
                     double montoTotal = obtenerMontoTotal(codigoEvento);
-                    int participantesValidos = obtenerParticipantesValidos(codigoEvento);
-                    int participantesInvalidos = obtenerParticipantesInvalidos(codigoEvento);
+                    int participantesValidos = obtenerParticipantesPorValidacion(codigoEvento, "1");
+                    int participantesInvalidos = obtenerParticipantesPorValidacion(codigoEvento, "0");
                     
                     if(montoTotal < 0 || participantesValidos < 0 || participantesInvalidos < 0){
                         return null;
@@ -236,12 +236,23 @@ public class EventoDB {
         return -1;
     }
     
-    private int obtenerParticipantesValidos(String codigoEvento) throws SQLException{
-        return 100;
-    }
-    
-    private int obtenerParticipantesInvalidos(String codigoEvento) throws SQLException{
-        return 100;
+    private int obtenerParticipantesPorValidacion(String codigoEvento, String confirmada){
+        String sql = "SELECT COUNT(*) AS participantes FROM inscripcion WHERE confirmada = ? AND codigo_evento = ?";
+        
+        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, confirmada);
+            ps.setString(2, codigoEvento);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("participantes");
+            }else{
+                return -1;
+            }
+            
+        } catch (SQLException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return -1;
+        }
     }
     
     public Evento obtenerEvento(String codigoEvento) {
