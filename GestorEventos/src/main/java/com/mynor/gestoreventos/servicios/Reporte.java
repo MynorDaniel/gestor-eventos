@@ -4,6 +4,7 @@
  */
 package com.mynor.gestoreventos.servicios;
 
+import com.mynor.gestoreventos.modelos.Actividad;
 import com.mynor.gestoreventos.modelos.Evento;
 import com.mynor.gestoreventos.modelos.Participante;
 import com.mynor.gestoreventos.modelos.Resultado;
@@ -168,4 +169,58 @@ public class Reporte {
             return new Resultado<>("Error al crear el reporte", "");
         }
     }
+
+    public Resultado generarReporteActividades(String url, LinkedList<Actividad> actividades, String evento) {
+        StringBuilder html = new StringBuilder();
+
+        html.append("""
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <title>Reporte de Actividades</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; }
+                    h1 { text-align: center; margin-bottom: 40px; }
+                    table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+                    th, td { border: 1px solid #000; padding: 6px; text-align: left; }
+                    th { background-color: #f2f2f2; }
+                </style>
+            </head>
+            <body>
+            <h1>Reporte de Actividades 
+            """);
+        html.append(evento);
+        html.append("</h1>");
+
+        html.append("<table>\n");
+        html.append("<tr><th>Código</th><th>Código Evento</th><th>Título</th><th>Hora Inicio</th><th>Cupo Máximo</th><th>Cantidad Participantes</th></tr>\n");
+
+        if (actividades != null && !actividades.isEmpty()) {
+            for (Actividad a : actividades) {
+                html.append("<tr>");
+                html.append("<td>").append(a.getCodigo()).append("</td>");
+                html.append("<td>").append(a.getCodigoEvento()).append("</td>");
+                html.append("<td>").append(a.getTitulo()).append("</td>");
+                html.append("<td>").append(a.getHoraInicio()).append("</td>");
+                html.append("<td>").append(a.getCupoMaximo()).append("</td>");
+                html.append("<td>").append(a.getCantidadParticipantes()).append("</td>");
+                html.append("</tr>\n");
+            }
+        } else {
+            html.append("<tr><td colspan='6'>No hay actividades</td></tr>\n");
+        }
+
+        html.append("</table>\n");
+        html.append("</body></html>");
+
+        try {
+            generarHTML(html.toString(), url, "ReporteActividades" + evento + ".html");
+            return new Resultado<>("Reporte creado en la ruta " + url, "");
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            return new Resultado<>("Error al crear el reporte", "");
+        }
+    }
+
 }

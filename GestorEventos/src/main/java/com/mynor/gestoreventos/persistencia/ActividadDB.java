@@ -5,11 +5,14 @@
 package com.mynor.gestoreventos.persistencia;
 
 import com.mynor.gestoreventos.modelos.*;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalTime;
+import java.util.LinkedList;
 
 /**
  *
@@ -94,8 +97,95 @@ public class ActividadDB {
             return false;
         }
     }
-    
-    public Resultado obtenerActividades(String evento, String tipoActividad, String correoEncargado){
-        return new Resultado<>("", "");
+
+    public LinkedList<Actividad> obtenerActividades(String evento, String tipoActividad, String correoEncargado) {
+        LinkedList<Actividad> actividades = new LinkedList<>();
+        
+        StringBuilder sql = new StringBuilder();
+        sql.append("""
+                   SELECT 
+                       a.*, 
+                       p.nombre AS encargado 
+                   FROM actividad a
+                   LEFT JOIN participante p 
+                       ON a.correo_impartidor = p.correo 
+                   WHERE a.codigo_evento = ? 
+                   """);
+        
+        if(tipoActividad != null && !tipoActividad.isEmpty()){
+            sql.append("AND a.tipo = ? ");
+        }
+        
+        if(correoEncargado != null && !correoEncargado.isEmpty()){
+            sql.append("AND a.correo_impartidor = ? ");
+        }
+        
+        try (Connection conn = Conexion.obtenerConexion(); 
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            ps.setString(1, evento);
+
+            int i = 2;
+            
+            if(tipoActividad != null && !tipoActividad.isEmpty()){
+                ps.setString(i, tipoActividad);
+                i++;
+            }
+
+            if(correoEncargado != null && !correoEncargado.isEmpty()){
+                ps.setString(i, correoEncargado);
+            }
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                Actividad a = new Actividad();
+                a.setCodigo(rs.getString("codigo"));
+                a.setCodigoEvento(rs.getString("codigo_evento"));
+                a.setTitulo(rs.getString("titulo"));
+                a.setEncargado(rs.getString("encargado"));
+                a.setHoraInicio(rs.getTime("hora_inicio").toLocalTime());
+                a.setCupoMaximo(rs.getInt("cupo_maximo"));
+                
+                int cantidadParticipantes = obtenerCantidadParticipantes(rs.getString("codigo"));
+                
+                if(cantidadParticipantes >= 0){
+                    a.setCantidadParticipantes(cantidadParticipantes);
+                }else{
+                    return null;
+                }
+
+                actividades.add(a);
+            }
+            
+            return actividades;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private int obtenerCantidadParticipantes(String actividad) {
+        String sql = "SELECT COUNT(*) AS participantes FROM asistencia WHERE codigo_actividad = ?";
+        
+        try (Connection conn = Conexion.obtenerConexion(); 
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, actividad);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                return rs.getInt("participantes");
+            }else{
+                return -1;
+            }
+            
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return -1;
+        }
     }
 }

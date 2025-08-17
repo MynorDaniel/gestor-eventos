@@ -11,6 +11,7 @@ import com.mynor.gestoreventos.persistencia.ActividadDB;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.LinkedList;
 
 /**
  *
@@ -74,8 +75,31 @@ public class ActividadServicio {
         return actividadDB.hayCupo(codigoActividad);
     }
     
-    public Resultado obtenerActividades(String evento, String tipoActividad, String correoEncargado){
-        return null;
+    public Resultado obtenerActividades(String evento, String tipoActividad, String correoEncargado, String url){
+        if(evento.isEmpty()){
+            return new Resultado<>("Codigo no indicado", "");
+        }
+        
+        try {
+            if(tipoActividad != null && !tipoActividad.isEmpty()){
+                TipoActividad.valueOf(tipoActividad);
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return new Resultado<>("Tipo de actividad invalido", "");
+        }
+        
+        LinkedList<Actividad> actividades = actividadDB.obtenerActividades(evento, tipoActividad, correoEncargado);
+        
+        if(actividades == null){
+            return new Resultado<>("Error al obtener las actividades", "");
+        }else if(actividades.isEmpty()){
+            return new Resultado<>("Sin coincidencias", "");
+        }
+        
+        Reporte reporte = new Reporte();
+        
+        return reporte.generarReporteActividades(url, actividades, evento);
     }
 
     public boolean participanteAceptable(String codigoActividad, String correoParticipante) {

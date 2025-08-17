@@ -6,8 +6,6 @@ package com.mynor.gestoreventos.persistencia;
 
 import com.mynor.gestoreventos.modelos.*;
 import com.mynor.gestoreventos.modelos.enums.TipoParticipante;
-import com.mynor.gestoreventos.modelos.enums.TipoReporte;
-import com.mynor.gestoreventos.servicios.Reporte;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

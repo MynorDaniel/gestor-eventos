@@ -21,6 +21,8 @@ public class Actividad {
     private int cupoMaximo;
     private TipoActividad tipo;
     private String titulo;
+    private int cantidadParticipantes;
+    private String encargado;
 
     public Actividad(String codigo, String correoImpartidor, String codigoEvento, LocalTime horaInicio, LocalTime horaFin, int cupoMaximo, TipoActividad tipo, String titulo) {
         this.codigo = codigo;
@@ -31,6 +33,25 @@ public class Actividad {
         this.cupoMaximo = cupoMaximo;
         this.tipo = tipo;
         this.titulo = titulo;
+    }
+
+    public Actividad() {
+    }
+
+    public String getEncargado() {
+        return encargado;
+    }
+
+    public void setEncargado(String encargado) {
+        this.encargado = encargado;
+    }
+
+    public int getCantidadParticipantes() {
+        return cantidadParticipantes;
+    }
+
+    public void setCantidadParticipantes(int cantidadParticipantes) {
+        this.cantidadParticipantes = cantidadParticipantes;
     }
 
     public String getCodigo() {
