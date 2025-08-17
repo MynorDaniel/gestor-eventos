@@ -7,15 +7,11 @@ package com.mynor.gestoreventos.servicios;
 import com.mynor.gestoreventos.modelos.Evento;
 import com.mynor.gestoreventos.modelos.Participante;
 import com.mynor.gestoreventos.modelos.Resultado;
-import com.mynor.gestoreventos.modelos.enums.TipoReporte;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
 import java.util.LinkedList;
 
 /**
@@ -23,49 +19,6 @@ import java.util.LinkedList;
  * @author mynordma
  */
 public class Reporte {
-    
-    public Resultado generarReporte(String url, ResultSet rs, TipoReporte tipo){
-        
-        try {
-            StringBuilder html = new StringBuilder();
-            html.append("<table border='1'>\n");
-            
-            // Cabecera
-            ResultSetMetaData meta = rs.getMetaData();
-            int columnas = meta.getColumnCount();
-            html.append("<tr>");
-            for (int i = 1; i <= columnas; i++) {
-                html.append("<th>").append(meta.getColumnLabel(i)).append("</th>");
-            }
-            html.append("</tr>\n");
-            
-            // Filas
-            while (rs.next()) {
-                html.append("<tr>");
-                for (int i = 1; i <= columnas; i++) {
-                    html.append("<td>").append(rs.getString(i)).append("</td>");
-                }
-                html.append("</tr>\n");
-            }
-            
-            html.append("</table>");
-            
-            try {
-                generarHTML(html.toString(), url, "Reporte_" + tipo.name() + ".html");
-                return new Resultado<>("Reporte creado en la ruta " + url, "");
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-                return new Resultado<>("Error al crear el reporte", "");
-            }
-            
-            
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return new Resultado<>("Error al crear el reporte html", ""); 
-        }
-        
-        
-    }
     
     public void generarHTML(String html, String ruta, String nombreArchivo) throws IOException {
         File archivo = Paths.get(ruta, nombreArchivo).toFile();
@@ -88,7 +41,7 @@ public class Reporte {
         }
     }
 
-    public Resultado generarReporteEventos(String url, LinkedList<Evento> eventos) {
+    public Resultado generarReporteEventos(String url, LinkedList<Evento> eventos){
         StringBuilder html = new StringBuilder();
 
         html.append("""
@@ -165,5 +118,54 @@ public class Reporte {
         }
     }
 
+    public Resultado generarReporteParticipantes(String url, LinkedList<Participante> participantes, String evento) {
+        StringBuilder html = new StringBuilder();
 
+        html.append("""
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <title>Reporte de Participantes</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; }
+                    h1 { text-align: center; margin-bottom: 40px; }
+                    table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }
+                    th, td { border: 1px solid #000; padding: 6px; text-align: left; }
+                    th { background-color: #f2f2f2; }
+                </style>
+            </head>
+            <body>
+            <h1>Reporte de Participantes 
+            """);
+        html.append(evento);
+        html.append("</h1>");
+
+        html.append("<table>\n");
+        html.append("<tr><th>Correo</th><th>Nombre</th><th>Tipo</th><th>Validado</th></tr>\n");
+
+        if (participantes != null && !participantes.isEmpty()) {
+            for (Participante p : participantes) {
+                html.append("<tr>");
+                html.append("<td>").append(p.getCorreo()).append("</td>");
+                html.append("<td>").append(p.getNombre()).append("</td>");
+                html.append("<td>").append(p.getTipo()).append("</td>");
+                html.append("<td>").append(p.getValidado()).append("</td>");
+                html.append("</tr>\n");
+            }
+        } else {
+            html.append("<tr><td colspan='4'>No hay participantes</td></tr>\n");
+        }
+
+        html.append("</table>\n");
+        html.append("</body></html>");
+
+        try {
+            generarHTML(html.toString(), url, "ReporteParticipantes" + evento + ".html");
+            return new Resultado<>("Reporte creado en la ruta " + url, "");
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            return new Resultado<>("Error al crear el reporte", "");
+        }
+    }
 }

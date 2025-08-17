@@ -6,14 +6,9 @@ package com.mynor.gestoreventos.servicios;
 
 import com.mynor.gestoreventos.modelos.*;
 import com.mynor.gestoreventos.modelos.enums.TipoParticipante;
-import com.mynor.gestoreventos.modelos.enums.TipoReporte;
 import com.mynor.gestoreventos.persistencia.ParticipanteDB;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.sql.ResultSet;
+import java.util.LinkedList;
 
 /**
  *
@@ -57,7 +52,17 @@ public class ParticipanteServicio {
             return new Resultado<>("Codigo no indicado", "");
         }
         
-        return participanteDB.obtenerParticipantes(evento, tipoParticipante, institucion, url);
+        LinkedList<Participante> participantes = participanteDB.obtenerParticipantes(evento, tipoParticipante, institucion);
+        
+        if(participantes == null){
+            return new Resultado<>("Error al obtener los participantes", "");
+        }else if(participantes.isEmpty()){
+            return new Resultado<>("Sin coincidencias", "");
+        }
+        
+        Reporte reporte = new Reporte();
+        
+        return reporte.generarReporteParticipantes(url, participantes, evento);
         
     }
     

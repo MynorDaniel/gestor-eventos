@@ -55,48 +55,65 @@ public class ParticipanteDB {
         }
     }
     
-    public Resultado obtenerParticipantes(String evento, String tipoParticipante, String institucion, String url){
+    public LinkedList<Participante> obtenerParticipantes(String evento, String tipoParticipante, String institucion) {
+        LinkedList<Participante> participantes = new LinkedList<>();
+
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT i.codigo_evento, p.tipo, p.nombre, p.institucion, i.confirmada AS `validado_si(1)_no(0)` FROM inscripcion AS i JOIN participante AS p ON i.correo_participante = p.correo WHERE i.codigo_evento = ? ");
-        
+        sql.append("""
+                   SELECT i.codigo_evento, p.tipo, p.nombre, p.institucion, p.correo, i.confirmada 
+                   FROM inscripcion AS i 
+                   JOIN participante AS p ON i.correo_participante = p.correo 
+                   WHERE i.codigo_evento = ?
+                   """);
+
         if(tipoParticipante != null && !tipoParticipante.isEmpty()){
             sql.append("AND p.tipo = ? ");
         }
-        
+
         if(institucion != null && !institucion.isEmpty()){
             sql.append("AND p.institucion = ? ");
         }
-        
-        try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql.toString())){
+
+        try (Connection conn = Conexion.obtenerConexion(); 
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
             ps.setString(1, evento);
-            
+
             int i = 2;
             
             if(tipoParticipante != null && !tipoParticipante.isEmpty()){
                 ps.setString(i, tipoParticipante);
                 i++;
             }
-            
+
             if(institucion != null && !institucion.isEmpty()){
                 ps.setString(i, institucion);
             }
-            
+
             ResultSet rs = ps.executeQuery();
-            
-            
-            
-            if(!rs.isBeforeFirst()){
-                return new Resultado<>("No hay participantes en el evento", "");
+
+            while(rs.next()){
+                Participante p = new Participante();
+                p.setCorreo(rs.getString("correo"));
+                p.setNombre(rs.getString("nombre"));
+                p.setTipo(TipoParticipante.valueOf(rs.getString("tipo")));
+                p.setInstitucion(rs.getString("institucion"));
+
+                boolean confirmada = rs.getBoolean("confirmada");
+                p.setValidado(confirmada ? "Si" : "No");
+
+                participantes.add(p);
             }
             
-            Reporte reporte = new Reporte();
-            return reporte.generarReporte(url, rs, TipoReporte.PARTICIPANTES);
-            
+            return participantes;
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
         }
+        
     }
+
 
     public Participante obtenerParticipante(String correoParticipante) {
         String sql = "SELECT * FROM participante WHERE correo = ?";

@@ -17,6 +17,7 @@ public class Participante {
     private TipoParticipante tipo;
     private String institucion;
     private Pago pagoAEvento;
+    private String validado;
 
     public Participante(String correo, String nombre, TipoParticipante tipo, String institucion) {
         this.correo = correo;
@@ -26,6 +27,14 @@ public class Participante {
     }
 
     public Participante() {
+    }
+
+    public String getValidado() {
+        return validado;
+    }
+
+    public void setValidado(String validado) {
+        this.validado = validado;
     }
 
     public Pago getPagoAEvento() {
