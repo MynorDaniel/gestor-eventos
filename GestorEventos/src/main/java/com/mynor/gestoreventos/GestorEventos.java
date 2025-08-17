@@ -14,9 +14,9 @@ import com.mynor.gestoreventos.servicios.*;
 public class GestorEventos {
 
     public static void main(String[] args) {
-        PagoServicio is = new PagoServicio();
+        //PagoServicio is = new PagoServicio();
         //InscripcionServicio is = new InscripcionServicio();
-        //EventoServicio es = new EventoServicio();
+        EventoServicio es = new EventoServicio();
         //ActividadServicio as = new ActividadServicio();
         //AsistenciaServicio as = new AsistenciaServicio();
         //ParticipanteServicio ps = new ParticipanteServicio();
@@ -24,10 +24,12 @@ public class GestorEventos {
         String codigoEvento = "EVT-100";
         String correo = "mynordma@gmail.com";
         
-        System.out.println("Realizando pago...");
-        Resultado r = is.crearPago(codigoEvento, correo, "0.00", "Tarjeta");
+        System.out.println("Obteniendo eventos...");
+        Resultado r = es.obtenerEventos("", "01/10/2013", "11/10/2013", "11", "80", "test");
         System.out.println(r.getMensaje());
         
+        //mensaje cuando eventos esta vacio
+        // testear filtros
         
     }
 }

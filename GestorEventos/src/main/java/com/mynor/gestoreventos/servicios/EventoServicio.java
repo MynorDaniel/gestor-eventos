@@ -9,6 +9,8 @@ import com.mynor.gestoreventos.modelos.enums.TipoEvento;
 import com.mynor.gestoreventos.persistencia.EventoDB;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.LinkedList;
 
 /**
  *
@@ -52,7 +54,7 @@ public class EventoServicio {
             
             return eventoDB.crearEvento(evento);
             
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | DateTimeParseException e) {
             System.out.println(e.getMessage());
             return new Resultado<>("Datos del evento invalidos", "");
         }
@@ -63,8 +65,56 @@ public class EventoServicio {
     }
     
     public Resultado obtenerEventos(String tipoEvento, String fechaInicial, String fechaFinal,
-            String cupoMinimo, String cupoMaximo){
-        return new Resultado<>("", "");
+            String cupoMinimo, String cupoMaximo, String url){
+        
+        try {
+            
+            if(tipoEvento != null && !tipoEvento.isEmpty()){
+                TipoEvento.valueOf(tipoEvento);
+            }
+            
+            if(fechaInicial != null && !fechaInicial.isEmpty()){
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate.parse(fechaInicial, formato);
+            }else if(fechaFinal != null && !fechaFinal.isEmpty()){
+                return new Resultado<>("Se debe ingresar fecha inicial y final", "");
+            }
+            
+            if(fechaFinal != null && !fechaFinal.isEmpty()){
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate.parse(fechaFinal, formato);
+            }else if(fechaInicial != null && !fechaInicial.isEmpty()){
+                return new Resultado<>("Se debe ingresar fecha inicial y final", "");
+            }
+            
+            if(cupoMinimo != null && !cupoMinimo.isEmpty()){
+                Integer.valueOf(cupoMinimo);
+            }else if(cupoMaximo != null && !cupoMaximo.isEmpty()){
+                return new Resultado<>("Se debe ingresar cupo minimo y maximo", "");
+            }
+            
+            if(cupoMaximo != null && !cupoMaximo.isEmpty()){
+                Integer.valueOf(cupoMaximo);
+            }else if(cupoMinimo != null && !cupoMinimo.isEmpty()){
+                return new Resultado<>("Se debe ingresar cupo minimo y maximo", "");
+            }
+            
+        } catch (IllegalArgumentException | DateTimeParseException e) {
+            System.out.println(e.getMessage());
+            return new Resultado<>("Datos del evento invalidos", "");
+        }
+        
+        LinkedList<Evento> eventos = eventoDB.obtenerEventos(tipoEvento, fechaInicial, fechaFinal, cupoMinimo, cupoMaximo);
+        
+        if(eventos == null){
+            return new Resultado<>("Error al obtener los eventos", "");
+        }else if(eventos.isEmpty()){
+            return new Resultado<>("Sin coincidencias", "");
+        }
+        
+        Reporte reporte = new Reporte();
+        
+        return reporte.generarReporteEventos(url, eventos);
     }
 
     public Evento obtenerEvento(String codigoEvento) {

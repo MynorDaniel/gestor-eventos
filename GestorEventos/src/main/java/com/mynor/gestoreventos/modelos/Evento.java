@@ -6,6 +6,7 @@ package com.mynor.gestoreventos.modelos;
 
 import com.mynor.gestoreventos.modelos.enums.TipoEvento;
 import java.time.LocalDate;
+import java.util.LinkedList;
 
 /**
  *
@@ -20,6 +21,10 @@ public class Evento {
     private TipoEvento tipo;
     private LocalDate fecha;
     private double precio;
+    private LinkedList<Participante> participantes;
+    private double montoTotal;
+    private int participantesValidos;
+    private int participantesInvalidos;
 
     public Evento(String codigo, String ubicacion, int cupoMaximo, String titulo, TipoEvento tipo, LocalDate fecha, double precio) {
         this.codigo = codigo;
@@ -29,6 +34,43 @@ public class Evento {
         this.tipo = tipo;
         this.fecha = fecha;
     }
+
+    public Evento() {
+    }
+
+    public double getMontoTotal() {
+        return montoTotal;
+    }
+
+    public void setMontoTotal(double montoTotal) {
+        this.montoTotal = montoTotal;
+    }
+
+    public int getParticipantesValidos() {
+        return participantesValidos;
+    }
+
+    public void setParticipantesValidos(int participantesValidos) {
+        this.participantesValidos = participantesValidos;
+    }
+
+    public int getParticipantesInvalidos() {
+        return participantesInvalidos;
+    }
+
+    public void setParticipantesInvalidos(int participantesInvalidos) {
+        this.participantesInvalidos = participantesInvalidos;
+    }
+
+    public LinkedList<Participante> getParticipantes() {
+        return participantes;
+    }
+
+    public void setParticipantes(LinkedList<Participante> participantes) {
+        this.participantes = participantes;
+    }
+    
+    
 
     public double getPrecio() {
         return precio;

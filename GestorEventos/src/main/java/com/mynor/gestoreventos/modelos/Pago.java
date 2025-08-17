@@ -24,6 +24,10 @@ public class Pago {
         this.metodoPago = metodoPago;
     }
 
+    public Pago() {
+
+    }
+
     public String getCodigoEvento() {
         return codigoEvento;
     }

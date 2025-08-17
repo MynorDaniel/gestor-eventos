@@ -16,12 +16,24 @@ public class Participante {
     private String nombre;
     private TipoParticipante tipo;
     private String institucion;
+    private Pago pagoAEvento;
 
     public Participante(String correo, String nombre, TipoParticipante tipo, String institucion) {
         this.correo = correo;
         this.nombre = nombre;
         this.tipo = tipo;
         this.institucion = institucion;
+    }
+
+    public Participante() {
+    }
+
+    public Pago getPagoAEvento() {
+        return pagoAEvento;
+    }
+
+    public void setPagoAEvento(Pago pagoAEvento) {
+        this.pagoAEvento = pagoAEvento;
     }
 
     public String getCorreo() {
