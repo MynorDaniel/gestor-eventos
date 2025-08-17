@@ -25,7 +25,7 @@ public class GestorEventos {
         String correo = "mynordma@gmail.com";
         
         System.out.println("Obteniendo eventos...");
-        Resultado r = es.obtenerEventos("", "01/10/2013", "11/10/2013", "11", "80", "test");
+        Resultado r = es.obtenerEventos("CHARLA", "01/10/2013", "11/10/2013", "1", "80", "test");
         System.out.println(r.getMensaje());
         
         //mensaje cuando eventos esta vacio

@@ -70,7 +70,7 @@ public class EventoServicio {
         try {
             
             if(tipoEvento != null && !tipoEvento.isEmpty()){
-                TipoEvento.valueOf(tipoEvento);
+                TipoEvento.valueOf(tipoEvento.toUpperCase());
             }
             
             if(fechaInicial != null && !fechaInicial.isEmpty()){

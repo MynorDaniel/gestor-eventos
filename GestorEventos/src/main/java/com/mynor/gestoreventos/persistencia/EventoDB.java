@@ -112,11 +112,15 @@ public class EventoDB {
                      """);
         
         if((fechaInicial != null && !fechaInicial.isEmpty()) && (fechaFinal != null && !fechaFinal.isEmpty())){
-            sql.append("AND fecha BETWEEN ? AND ? ");
+            sql.append("AND e.fecha BETWEEN ? AND ? ");
         }
         
         if((cupoMinimo != null && !cupoMinimo.isEmpty()) && (cupoMaximo != null && !cupoMaximo.isEmpty())){
-            sql.append("AND cupo_maximo BETWEEN ? AND ? ");
+            sql.append("AND e.cupo_maximo BETWEEN ? AND ? ");
+        }
+        
+        if(tipoEvento != null && !tipoEvento.isEmpty()){
+            sql.append("AND e.tipo = ? ");
         }
         
         sql.append("ORDER BY e.codigo, p.correo");
@@ -142,6 +146,11 @@ public class EventoDB {
                 ps.setString(contador, cupoMinimo);
                 contador++;
                 ps.setString(contador, cupoMaximo);
+                contador++;
+            }
+            
+            if(tipoEvento != null && !tipoEvento.isEmpty()){
+                ps.setString(contador, tipoEvento.toUpperCase());
             }
             
             ResultSet rs = ps.executeQuery();
