@@ -6,6 +6,8 @@ package com.mynor.gestoreventos;
 
 import com.mynor.gestoreventos.modelos.*;
 import com.mynor.gestoreventos.servicios.*;
+import java.util.LinkedList;
+import java.util.Objects;
 
 /**
  *
@@ -17,16 +19,26 @@ public class GestorEventos {
         //PagoServicio is = new PagoServicio();
         //InscripcionServicio is = new InscripcionServicio();
         //EventoServicio es = new EventoServicio();
-        ActividadServicio as = new ActividadServicio();
+        //ActividadServicio as = new ActividadServicio();
         //AsistenciaServicio as = new AsistenciaServicio();
         //ParticipanteServicio ps = new ParticipanteServicio();
+        ArchivoServicio as = new ArchivoServicio("prueba.txt");
+        LinkedList<Instruccion> instrucciones = as.obtenerInstrucciones();
         
-        String codigoEvento = "EVT-100";
-        String correo = "mynordma@gmail.com";
         
-        System.out.println("Obteniendo actividades...");
-        Resultado r = as.obtenerActividades("EVT-100", "TALLER", "mynorma@gmail.com", "test");
-        System.out.println(r.getMensaje());
+        Ejecutor ejecutor = new Ejecutor();
+        
+        
+        if(instrucciones != null && !instrucciones.isEmpty()){
+            instrucciones.stream().filter(obj -> Objects.nonNull(obj)) .forEach(i -> {
+                System.out.println("Ejecutando instrucción " + i.toString());
+                ejecutor.ejecutar("test", i, 0, log -> {
+                    System.out.println(log + " " + i.toString());
+                });
+            });
+        }
+        
+        
         
     }
 }

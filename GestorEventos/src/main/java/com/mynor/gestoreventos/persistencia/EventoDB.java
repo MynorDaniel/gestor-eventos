@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class EventoDB {
     
     public Resultado crearEvento(Evento evento){
-        String sql = "INSERT INTO evento (codigo, ubicacion, cupo_maximo, titulo, tipo, fecha) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO evento (codigo, ubicacion, cupo_maximo, titulo, tipo, fecha, precio) VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try(Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, evento.getCodigo());
@@ -35,6 +36,7 @@ public class EventoDB {
             ps.setString(4, evento.getTitulo());
             ps.setString(5, evento.getTipo().name());
             ps.setDate(6, Date.valueOf(evento.getFecha()));
+            ps.setDouble(7, evento.getPrecio());
             
             int columnasAfectadas = ps.executeUpdate();
             
@@ -128,14 +130,12 @@ public class EventoDB {
 
         try (Connection conn = Conexion.obtenerConexion(); PreparedStatement ps = conn.prepareStatement(sql.toString());) {
             
-            DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-            LocalDate fechaInicialNueva = LocalDate.parse(fechaInicial, formatoEntrada);
-            LocalDate fechaFinalNueva = LocalDate.parse(fechaFinal, formatoEntrada);
-            
             int contador = 1;
             
             if((fechaInicial != null && !fechaInicial.isEmpty()) && (fechaFinal != null && !fechaFinal.isEmpty())){
+                DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate fechaInicialNueva = LocalDate.parse(fechaInicial, formatoEntrada);
+                LocalDate fechaFinalNueva = LocalDate.parse(fechaFinal, formatoEntrada);
                 ps.setString(contador, fechaInicialNueva.toString());
                 contador++;
                 ps.setString(contador, fechaFinalNueva.toString());
@@ -207,7 +207,7 @@ public class EventoDB {
                 }
             }
 
-        } catch (SQLException e) {
+        } catch (SQLException | DateTimeParseException e) {
             System.out.println(e.getMessage());
             return null;
         }

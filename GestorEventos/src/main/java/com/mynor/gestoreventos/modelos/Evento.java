@@ -33,6 +33,7 @@ public class Evento {
         this.titulo = titulo;
         this.tipo = tipo;
         this.fecha = fecha;
+        this.precio = precio;
     }
 
     public Evento() {

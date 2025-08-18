@@ -49,7 +49,6 @@ public class EventoServicio {
             TipoEvento tipoEvento = TipoEvento.valueOf(tipo.toUpperCase());
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate fechaEvento = LocalDate.parse(fecha, formato);
-            
             Evento evento = new Evento(codigo, ubicacion, cupo, titulo, tipoEvento, fechaEvento, Double.parseDouble(precio));
             
             return eventoDB.crearEvento(evento);
