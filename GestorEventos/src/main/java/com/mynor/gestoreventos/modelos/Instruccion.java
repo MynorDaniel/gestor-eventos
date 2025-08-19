@@ -67,7 +67,6 @@ public class Instruccion {
             }
         }
 
-
     }
 
     public TipoInstruccion getTipo() {
@@ -88,6 +87,6 @@ public class Instruccion {
     
     @Override
     public String toString(){
-        return tipo.name() + " " + String.join(", ", parametros);
+        return "[" + tipo.name() + " " + String.join(", ", parametros) + "]";
     }
 }

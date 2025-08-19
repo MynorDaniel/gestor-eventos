@@ -13,15 +13,17 @@ import java.util.function.Consumer;
  */
 public class Ejecutor {
     
-    public void ejecutar(String url, Instruccion i, int tiempoProcesamiento, Consumer<String> callback) {
+    public void ejecutar(String url, Instruccion i, String tiempo, Consumer<String> callback) {
         //Thread hilo = new Thread(() -> {
             try {
+                int tiempoProcesamiento = Integer.parseInt(tiempo);
+                if(tiempoProcesamiento < 0) throw new NumberFormatException();
                 Thread.sleep(tiempoProcesamiento);
                 String log = i.ejecutar(url).getMensaje();
                 callback.accept(log);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException | NumberFormatException e) {
                 System.out.println(e.getMessage());
-                callback.accept("Error al ejecutar instrucción");
+                callback.accept("Error, verifica que el tiempo sea valido");
             }
         //});
         //hilo.start();
