@@ -112,11 +112,11 @@ public class ActividadDB {
                    WHERE a.codigo_evento = ? 
                    """);
         
-        if(tipoActividad != null && !tipoActividad.isEmpty()){
+        if(tipoActividad != null && !tipoActividad.trim().isEmpty()){
             sql.append("AND a.tipo = ? ");
         }
         
-        if(correoEncargado != null && !correoEncargado.isEmpty()){
+        if(correoEncargado != null && !correoEncargado.trim().isEmpty()){
             sql.append("AND a.correo_impartidor = ? ");
         }
         
@@ -127,12 +127,12 @@ public class ActividadDB {
 
             int i = 2;
             
-            if(tipoActividad != null && !tipoActividad.isEmpty()){
+            if(tipoActividad != null && !tipoActividad.trim().isEmpty()){
                 ps.setString(i, tipoActividad);
                 i++;
             }
 
-            if(correoEncargado != null && !correoEncargado.isEmpty()){
+            if(correoEncargado != null && !correoEncargado.trim().isEmpty()){
                 ps.setString(i, correoEncargado);
             }
 
