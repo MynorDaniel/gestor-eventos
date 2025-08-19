@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 /**
- *
+ * Clase que recibe parametros sin procesar desde el usuario, los valida y arma los modelos para
+ * realizar peticiones a ParticipanteDB
  * @author mynordma
  */
 public class ParticipanteServicio {
@@ -48,7 +49,7 @@ public class ParticipanteServicio {
     
     public Resultado obtenerParticipantes(String evento, String tipoParticipante, String institucion, String url){
         
-        if(evento.isEmpty()){
+        if(evento.trim().isEmpty()){
             return new Resultado<>("Codigo no indicado", "");
         }
         
@@ -62,7 +63,7 @@ public class ParticipanteServicio {
         
         Reporte reporte = new Reporte();
         
-        return reporte.generarReporteParticipantes(url, participantes, evento);
+        return reporte.generarReporteParticipantes(url, participantes, evento, tipoParticipante, institucion);
         
     }
     
@@ -72,7 +73,7 @@ public class ParticipanteServicio {
             return new Resultado<>("Correo invalido", "");
         }else if(!(new AsistenciaServicio().existeAsistencia(codigoEvento, correoParticipante))){
             return new Resultado<>("El participante " + correoParticipante + " no ha asistido a ninguna actividad de " + codigoEvento, "");
-        }else if(codigoEvento.isEmpty()){
+        }else if(codigoEvento.trim().isEmpty()){
             return new Resultado<>("Codigo invalido", "");
         }
         

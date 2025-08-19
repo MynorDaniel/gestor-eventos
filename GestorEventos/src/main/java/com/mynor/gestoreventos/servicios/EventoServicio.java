@@ -13,7 +13,8 @@ import java.time.format.DateTimeParseException;
 import java.util.LinkedList;
 
 /**
- *
+ * Clase que recibe parametros sin procesar desde el usuario, los valida y arma los modelos para
+ * realizar peticiones a EventoDB
  * @author mynordma
  */
 public class EventoServicio {
@@ -35,7 +36,7 @@ public class EventoServicio {
             return new Resultado<>("Nombre de la ubicacion del evento demasiado grande", "");
         }else if(!tituloValido){
             return new Resultado<>("Titulo demasiado grande", "");
-        }else if(codigo.isEmpty()){
+        }else if(codigo.trim().isEmpty()){
             return new Resultado<>("Codigo invalido", "");
         }
         
@@ -55,7 +56,7 @@ public class EventoServicio {
             
         } catch (IllegalArgumentException | DateTimeParseException e) {
             System.out.println(e.getMessage());
-            return new Resultado<>("Datos del evento invalidos", "");
+            return new Resultado<>("Fecha o tipo invalido", "");
         }
     }
     
@@ -68,39 +69,39 @@ public class EventoServicio {
         
         try {
             
-            if(tipoEvento != null && !tipoEvento.isEmpty()){
+            if(tipoEvento != null && !tipoEvento.trim().isEmpty()){
                 TipoEvento.valueOf(tipoEvento.toUpperCase());
             }
             
-            if(fechaInicial != null && !fechaInicial.isEmpty()){
+            if(fechaInicial != null && !fechaInicial.trim().isEmpty()){
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate.parse(fechaInicial, formato);
-            }else if(fechaFinal != null && !fechaFinal.isEmpty()){
+            }else if(fechaFinal != null && !fechaFinal.trim().isEmpty()){
                 return new Resultado<>("Se debe ingresar fecha inicial y final", "");
             }
             
-            if(fechaFinal != null && !fechaFinal.isEmpty()){
+            if(fechaFinal != null && !fechaFinal.trim().isEmpty()){
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate.parse(fechaFinal, formato);
-            }else if(fechaInicial != null && !fechaInicial.isEmpty()){
+            }else if(fechaInicial != null && !fechaInicial.trim().isEmpty()){
                 return new Resultado<>("Se debe ingresar fecha inicial y final", "");
             }
             
-            if(cupoMinimo != null && !cupoMinimo.isEmpty()){
+            if(cupoMinimo != null && !cupoMinimo.trim().isEmpty()){
                 Integer.valueOf(cupoMinimo);
-            }else if(cupoMaximo != null && !cupoMaximo.isEmpty()){
+            }else if(cupoMaximo != null && !cupoMaximo.trim().isEmpty()){
                 return new Resultado<>("Se debe ingresar cupo minimo y maximo", "");
             }
             
-            if(cupoMaximo != null && !cupoMaximo.isEmpty()){
+            if(cupoMaximo != null && !cupoMaximo.trim().isEmpty()){
                 Integer.valueOf(cupoMaximo);
-            }else if(cupoMinimo != null && !cupoMinimo.isEmpty()){
+            }else if(cupoMinimo != null && !cupoMinimo.trim().isEmpty()){
                 return new Resultado<>("Se debe ingresar cupo minimo y maximo", "");
             }
             
         } catch (IllegalArgumentException | DateTimeParseException e) {
             System.out.println(e.getMessage());
-            return new Resultado<>("Datos del evento invalidos", "");
+            return new Resultado<>("Error, verifica que el tipo, fecha y cupo sean validos", "");
         }
         
         LinkedList<Evento> eventos = eventoDB.obtenerEventos(tipoEvento, fechaInicial, fechaFinal, cupoMinimo, cupoMaximo);
@@ -113,7 +114,8 @@ public class EventoServicio {
         
         Reporte reporte = new Reporte();
         
-        return reporte.generarReporteEventos(url, eventos);
+        return reporte.generarReporteEventos(url, eventos, tipoEvento, fechaInicial, fechaFinal,
+            cupoMinimo, cupoMaximo);
     }
 
     public Evento obtenerEvento(String codigoEvento) {

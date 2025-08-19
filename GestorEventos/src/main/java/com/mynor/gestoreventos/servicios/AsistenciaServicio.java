@@ -8,7 +8,8 @@ import com.mynor.gestoreventos.modelos.*;
 import com.mynor.gestoreventos.persistencia.AsistenciaDB;
 
 /**
- *
+ * Clase que recibe parametros sin procesar desde el usuario, los valida y arma los modelos para
+ * realizar peticiones a AsistenciaDB
  * @author mynordma
  */
 public class AsistenciaServicio {
@@ -29,7 +30,7 @@ public class AsistenciaServicio {
             return new Resultado<>("No hay cupos disponibles", "");
         }else if(!actividadServicio.participanteAceptable(codigoActividad, correoParticipante)){
             return new Resultado<>("El participante no puede asignarse a esta actividad", "");
-        }else if(codigoActividad.isEmpty()){
+        }else if(codigoActividad.trim().isEmpty()){
             return new Resultado<>("Codigo invalido", "");
         }
         

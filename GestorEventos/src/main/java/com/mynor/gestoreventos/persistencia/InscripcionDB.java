@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
+ * Clase encargada de realizar operaciones en la tabla inscripcion
  * @author mynordma
  */
 public class InscripcionDB {
@@ -30,11 +30,11 @@ public class InscripcionDB {
             if(columnasAfectadas>0){
                 return new Resultado<>("Inscripcion de " + inscripcion.getCorreoParticipante() + " al evento " + inscripcion.getCodigoEvento()+ " registrada exitosamente", inscripcion);
             }else{
-                return new Resultado<>("Error al registrar la inscripcion", "");
+                return new Resultado<>("Error, inscripcion ya existe", "");
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());
-            return new Resultado<>("Error al registrar la inscripcion", "");
+            return new Resultado<>("Error, inscripcion ya existe", "");
         }
     }
     
@@ -50,12 +50,12 @@ public class InscripcionDB {
             if(columnasAfectadas>0){
                 return new Resultado<>("Inscripcion confirmada", "");
             }else{
-                return new Resultado<>("Error al confirmar la inscripcion de " + correoParticipante + " a " + codigoEvento, "");
+                return new Resultado<>("Error, no se pudo encontrar la inscripcion de " + correoParticipante + " a " + codigoEvento, "");
             }
             
         }catch(SQLException e){
             System.out.println(e.getMessage());
-            return new Resultado<>("Error al confirmar la inscripcion", "");
+            return new Resultado<>("Error, no se pudo encontrar la inscripcion", "");
         }
     }
 

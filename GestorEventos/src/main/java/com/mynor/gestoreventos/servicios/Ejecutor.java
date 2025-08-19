@@ -13,6 +13,14 @@ import java.util.function.Consumer;
  */
 public class Ejecutor {
     
+    /**
+     * Ejecuta una instruccion
+     * Al terminar, ejecuta el callback para procesar el log en el frontend
+     * @param url
+     * @param i
+     * @param tiempo
+     * @param callback
+     */
     public void ejecutar(String url, Instruccion i, String tiempo, Consumer<String> callback) {
         //Thread hilo = new Thread(() -> {
             try {

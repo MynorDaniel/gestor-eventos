@@ -16,7 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
- *
+ * Ventana principal de la aplicacion
  * @author mynordma
  */
 public class Ventana extends javax.swing.JFrame {
@@ -242,6 +242,11 @@ public class Ventana extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Arma una instruccion con los datos en seco de los form y la ejecuta
+     * @param parametros
+     * @param tipo 
+     */
     public void procesarParametros(String[] parametros, TipoInstruccion tipo){
         Instruccion instruccion = new Instruccion();
         instruccion.setParametros(parametros);
@@ -344,6 +349,12 @@ public class Ventana extends javax.swing.JFrame {
         return consola;
     }
 
+    /**
+     * Pide una url para guardar los reportes,
+     * asegura que siempre haya una url para reportes valida y
+     * se ejecuta solo una vez siempre que se ingrese un directorio
+     * @return
+     */
     public String getUrlReportes() {
         if (urlReportes != null && !urlReportes.trim().isEmpty()) {
             return urlReportes;

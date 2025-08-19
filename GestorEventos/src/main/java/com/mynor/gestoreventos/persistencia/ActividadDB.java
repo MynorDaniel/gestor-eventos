@@ -5,17 +5,15 @@
 package com.mynor.gestoreventos.persistencia;
 
 import com.mynor.gestoreventos.modelos.*;
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.time.LocalTime;
 import java.util.LinkedList;
 
 /**
- *
+ * Clase encargada de realizar operaciones en la tabla Actividad
  * @author mynordma
  */
 public class ActividadDB {
@@ -38,11 +36,11 @@ public class ActividadDB {
             if(columnasAfectadas>0){
                 return new Resultado<>("Actividad " + actividad.getCodigo()+ " registrada exitosamente", actividad);
             }else{
-                return new Resultado<>("Error al registrar la actividad", "");
+                return new Resultado<>("Error, actividad ya existe", "");
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());
-            return new Resultado<>("Error al registrar la actividad", "");
+            return new Resultado<>("Error, actividad ya existe", "");
         }
     }
     

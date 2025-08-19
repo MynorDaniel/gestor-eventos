@@ -14,7 +14,8 @@ import java.time.format.DateTimeParseException;
 import java.util.LinkedList;
 
 /**
- *
+ * Clase que recibe parametros sin procesar desde el usuario, los valida y arma los modelos para
+ * realizar peticiones a ActividadDB
  * @author mynordma
  */
 public class ActividadServicio {
@@ -35,9 +36,9 @@ public class ActividadServicio {
             return new Resultado<>("Correo invalido", "");
         }else if(!tituloValido){
             return new Resultado<>("Titulo demasiado grande", "");
-        }else if(codigo.isEmpty()){
+        }else if(codigo.trim().isEmpty()){
             return new Resultado<>("Codigo invalido", "");
-        }else if(codigoEvento.isEmpty()){
+        }else if(codigoEvento.trim().isEmpty()){
             return new Resultado<>("Codigo del evento invalido", "");
         }
         
@@ -66,7 +67,7 @@ public class ActividadServicio {
             
         } catch (IllegalArgumentException | DateTimeParseException e) {
             System.out.println(e.getMessage());
-            return new Resultado<>("Datos del evento invalidos", "");
+            return new Resultado<>("Fecha o tipo invalido", "");
         }
         
     }
@@ -76,12 +77,12 @@ public class ActividadServicio {
     }
     
     public Resultado obtenerActividades(String evento, String tipoActividad, String correoEncargado, String url){
-        if(evento.isEmpty()){
+        if(evento.trim().isEmpty()){
             return new Resultado<>("Codigo no indicado", "");
         }
         
         try {
-            if(tipoActividad != null && !tipoActividad.isEmpty()){
+            if(tipoActividad != null && !tipoActividad.trim().isEmpty()){
                 TipoActividad.valueOf(tipoActividad);
             }
         } catch (IllegalArgumentException e) {
@@ -99,7 +100,7 @@ public class ActividadServicio {
         
         Reporte reporte = new Reporte();
         
-        return reporte.generarReporteActividades(url, actividades, evento);
+        return reporte.generarReporteActividades(url, actividades, evento, tipoActividad, correoEncargado);
     }
 
     public boolean participanteAceptable(String codigoActividad, String correoParticipante) {

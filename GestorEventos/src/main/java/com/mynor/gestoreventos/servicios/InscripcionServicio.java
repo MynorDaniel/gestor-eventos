@@ -11,7 +11,8 @@ import com.mynor.gestoreventos.persistencia.InscripcionDB;
 import com.mynor.gestoreventos.persistencia.PagoDB;
 
 /**
- *
+ * Clase que recibe parametros sin procesar desde el usuario, los valida y arma los modelos para
+ * realizar peticiones a InscripcionDB
  * @author mynordma
  */
 public class InscripcionServicio {
@@ -30,7 +31,7 @@ public class InscripcionServicio {
         
         if(!(correoValido && hayCupoEnEvento)){
             return new Resultado<>("Correo del participante invalido o no hay cupo", "");
-        }else if(codigoEvento.isEmpty()){
+        }else if(codigoEvento.trim().isEmpty()){
             return new Resultado<>("Codigo invalido", "");
         }
         
@@ -48,7 +49,7 @@ public class InscripcionServicio {
         
         if(!correoValido){
             return new Resultado<>("Correo del participante invalido", "");
-        }else if(codigoEvento.isEmpty()){
+        }else if(codigoEvento.trim().isEmpty()){
             return new Resultado<>("Codigo invalido", "");
         }
         

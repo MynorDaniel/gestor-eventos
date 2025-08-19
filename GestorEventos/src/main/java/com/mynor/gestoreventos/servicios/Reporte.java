@@ -21,6 +21,13 @@ import java.util.LinkedList;
  */
 public class Reporte {
     
+    /**
+     * Genera un archivo html a partir de un texto y la ruta
+     * @param html
+     * @param ruta
+     * @param nombreArchivo
+     * @throws IOException 
+     */
     public void generarHTML(String html, String ruta, String nombreArchivo) throws IOException {
         File archivo = Paths.get(ruta, nombreArchivo).toFile();
         File carpeta = archivo.getParentFile();
@@ -42,7 +49,8 @@ public class Reporte {
         }
     }
 
-    public Resultado generarReporteEventos(String url, LinkedList<Evento> eventos){
+    public Resultado generarReporteEventos(String url, LinkedList<Evento> eventos, String tipoEvento, String fechaInicial, String fechaFinal,
+            String cupoMinimo, String cupoMaximo){
         StringBuilder html = new StringBuilder();
 
         html.append("""
@@ -64,6 +72,12 @@ public class Reporte {
             <body>
             <h1>Reporte de Eventos</h1>
             """);
+        html.append("\n");
+        
+        html.append("<h2>");
+        String filtros = "Filtros: " + tipoEvento + " - " + fechaInicial + " - " + fechaFinal + " - " + cupoMinimo + " - " + cupoMaximo;
+        html.append(filtros);
+        html.append("</h2>\n");
 
         for (Evento e : eventos) {
             html.append("<table>\n");
@@ -119,7 +133,7 @@ public class Reporte {
         }
     }
 
-    public Resultado generarReporteParticipantes(String url, LinkedList<Participante> participantes, String evento) {
+    public Resultado generarReporteParticipantes(String url, LinkedList<Participante> participantes, String evento, String tipoParticipante, String institucion) {
         StringBuilder html = new StringBuilder();
 
         html.append("""
@@ -140,7 +154,12 @@ public class Reporte {
             <h1>Reporte de Participantes 
             """);
         html.append(evento);
-        html.append("</h1>");
+        html.append("</h1>\n");
+        
+        html.append("<h2>");
+        String filtros = "Filtros: " + tipoParticipante + " - " + institucion;
+        html.append(filtros);
+        html.append("</h2>\n");
 
         html.append("<table>\n");
         html.append("<tr><th>Correo</th><th>Nombre</th><th>Tipo</th><th>Validado</th></tr>\n");
@@ -170,7 +189,7 @@ public class Reporte {
         }
     }
 
-    public Resultado generarReporteActividades(String url, LinkedList<Actividad> actividades, String evento) {
+    public Resultado generarReporteActividades(String url, LinkedList<Actividad> actividades, String evento, String tipoActividad, String correoEncargado) {
         StringBuilder html = new StringBuilder();
 
         html.append("""
@@ -191,7 +210,12 @@ public class Reporte {
             <h1>Reporte de Actividades 
             """);
         html.append(evento);
-        html.append("</h1>");
+        html.append("</h1>\n");
+        
+        html.append("<h2>");
+        String filtros = "Filtros: " + tipoActividad + " - " + correoEncargado;
+        html.append(filtros);
+        html.append("</h2>\n");
 
         html.append("<table>\n");
         html.append("<tr><th>Código</th><th>Código Evento</th><th>Título</th><th>Hora Inicio</th><th>Cupo Máximo</th><th>Cantidad Participantes</th></tr>\n");

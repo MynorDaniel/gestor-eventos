@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 
 /**
- *
+ * Clase encargada de realizar operaciones en la tabla Participante
  * @author mynordma
  */
 public class ParticipanteDB {
@@ -30,7 +30,7 @@ public class ParticipanteDB {
             return new Resultado<>("Participante " + participante.getCorreo() + " registrado exitosamente", participante);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            return new Resultado<>("Error al registrar al participante", "");
+            return new Resultado<>("Error, participante ya existe", "");
         }
     }
     
@@ -64,11 +64,11 @@ public class ParticipanteDB {
                    WHERE i.codigo_evento = ?
                    """);
 
-        if(tipoParticipante != null && !tipoParticipante.isEmpty()){
+        if(tipoParticipante != null && !tipoParticipante.trim().isEmpty()){
             sql.append("AND p.tipo = ? ");
         }
 
-        if(institucion != null && !institucion.isEmpty()){
+        if(institucion != null && !institucion.trim().isEmpty()){
             sql.append("AND p.institucion = ? ");
         }
 
@@ -79,12 +79,12 @@ public class ParticipanteDB {
 
             int i = 2;
             
-            if(tipoParticipante != null && !tipoParticipante.isEmpty()){
+            if(tipoParticipante != null && !tipoParticipante.trim().isEmpty()){
                 ps.setString(i, tipoParticipante);
                 i++;
             }
 
-            if(institucion != null && !institucion.isEmpty()){
+            if(institucion != null && !institucion.trim().isEmpty()){
                 ps.setString(i, institucion);
             }
 

@@ -124,7 +124,6 @@ public class ArchivoForm extends javax.swing.JInternalFrame {
         jf.setFileSelectionMode(JFileChooser.FILES_ONLY); // solo archivos
         jf.setDialogTitle("Seleccionar archivo .txt");
 
-        // Filtro para solo mostrar archivos .txt
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de texto (*.txt)", "txt");
         jf.setFileFilter(filter);
 

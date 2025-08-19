@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
+ * Clase que lee linea por linea un archivo de texto y devuelve instrucciones segun el formato requerido
  * @author mynordma
  */
 public class ArchivoServicio {
@@ -56,6 +56,10 @@ public class ArchivoServicio {
         this.URL = URL;
     }
     
+    /**
+     * Devuelve todas las instrucciones
+     * @return 
+     */
     public LinkedList<Instruccion> obtenerInstrucciones(){
         LinkedList<Instruccion> instrucciones = new LinkedList<>();
         
@@ -74,8 +78,13 @@ public class ArchivoServicio {
         }
     }
     
+    /**
+     * Recibe una linea y devuelve su instruccion correspondiente
+     * @param linea
+     * @return 
+     */
     private Instruccion procesarLinea(String linea){
-        if(linea.isEmpty()){
+        if(linea.trim().isEmpty()){
             return null;
         }
         
@@ -120,12 +129,20 @@ public class ArchivoServicio {
                 return procesarLineaPorTipo(linea, REGEX_REPORTE_EVENTOS, TipoInstruccion.REPORTE_EVENTOS, 5);
             }
             default -> {
-                System.out.println("Instrucción no reconocida: " + linea);
+                System.out.println("Instrucción con formato desconocido: " + linea);
                 return null;
             }
         }
     }
     
+    /**
+     * Extrae los datos de la linea y arma una instruccion
+     * @param linea
+     * @param regex
+     * @param tipo
+     * @param numeroParametros
+     * @return 
+     */
     private Instruccion procesarLineaPorTipo(String linea, String regex, TipoInstruccion tipo, int numeroParametros){
 
         Pattern pattern = Pattern.compile(regex);

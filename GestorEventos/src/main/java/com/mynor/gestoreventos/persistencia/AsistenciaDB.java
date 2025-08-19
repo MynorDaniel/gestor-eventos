@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
+ * Clase encargada de realizar operaciones en la tabla asistencia
  * @author mynordma
  */
 public class AsistenciaDB {
@@ -28,7 +28,7 @@ public class AsistenciaDB {
             if(columnasAfectadas>0){
                 return new Resultado<>("Asistencia de " + asistencia.getCorreoParticipante() + " a la actividad " + asistencia.getCodigoActividad()+ " registrada exitosamente", asistencia);
             }else{
-                return new Resultado<>("Error al registrar la asistencia", "");
+                return new Resultado<>("Asistencia duplicada, ignorando...", "");
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());

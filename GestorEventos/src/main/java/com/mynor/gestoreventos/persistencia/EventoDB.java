@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- *
+ * Clase encargada de realizar operaciones en la tabla Evento
  * @author mynordma
  */
 public class EventoDB {
@@ -43,11 +43,11 @@ public class EventoDB {
             if(columnasAfectadas>0){
                 return new Resultado<>("Evento " + evento.getCodigo()+ " registrado exitosamente", evento);
             }else{
-                return new Resultado<>("Error al registrar el evento", "");
+                return new Resultado<>("Error, evento ya existe", "");
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());
-            return new Resultado<>("Error al registrar el evento", "");
+            return new Resultado<>("Error, evento ya existe", "");
         }
     }
     
@@ -113,15 +113,15 @@ public class EventoDB {
                     WHERE 1=1 
                      """);
         
-        if((fechaInicial != null && !fechaInicial.isEmpty()) && (fechaFinal != null && !fechaFinal.isEmpty())){
+        if((fechaInicial != null && !fechaInicial.trim().isEmpty()) && (fechaFinal != null && !fechaFinal.trim().isEmpty())){
             sql.append("AND e.fecha BETWEEN ? AND ? ");
         }
         
-        if((cupoMinimo != null && !cupoMinimo.isEmpty()) && (cupoMaximo != null && !cupoMaximo.isEmpty())){
+        if((cupoMinimo != null && !cupoMinimo.trim().isEmpty()) && (cupoMaximo != null && !cupoMaximo.trim().isEmpty())){
             sql.append("AND e.cupo_maximo BETWEEN ? AND ? ");
         }
         
-        if(tipoEvento != null && !tipoEvento.isEmpty()){
+        if(tipoEvento != null && !tipoEvento.trim().isEmpty()){
             sql.append("AND e.tipo = ? ");
         }
         
@@ -132,7 +132,7 @@ public class EventoDB {
             
             int contador = 1;
             
-            if((fechaInicial != null && !fechaInicial.isEmpty()) && (fechaFinal != null && !fechaFinal.isEmpty())){
+            if((fechaInicial != null && !fechaInicial.trim().isEmpty()) && (fechaFinal != null && !fechaFinal.trim().isEmpty())){
                 DateTimeFormatter formatoEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate fechaInicialNueva = LocalDate.parse(fechaInicial, formatoEntrada);
                 LocalDate fechaFinalNueva = LocalDate.parse(fechaFinal, formatoEntrada);
@@ -142,14 +142,14 @@ public class EventoDB {
                 contador++;
             }
 
-            if((cupoMinimo != null && !cupoMinimo.isEmpty()) && (cupoMaximo != null && !cupoMaximo.isEmpty())){
+            if((cupoMinimo != null && !cupoMinimo.trim().isEmpty()) && (cupoMaximo != null && !cupoMaximo.trim().isEmpty())){
                 ps.setString(contador, cupoMinimo);
                 contador++;
                 ps.setString(contador, cupoMaximo);
                 contador++;
             }
             
-            if(tipoEvento != null && !tipoEvento.isEmpty()){
+            if(tipoEvento != null && !tipoEvento.trim().isEmpty()){
                 ps.setString(contador, tipoEvento.toUpperCase());
             }
             

@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
+ * Clase encargada de realizar operaciones en la tabla Pago
  * @author mynordma
  */
 public class PagoDB {
@@ -30,11 +30,11 @@ public class PagoDB {
             if(columnasAfectadas>0){
                 return new Resultado<>("Pago registrado exitosamente", pago);
             }else{
-                return new Resultado<>("Error al registrar el pago", "");
+                return new Resultado<>("Error, pago ya existe", "");
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());
-            return new Resultado<>("Error al registrar el pago", "");
+            return new Resultado<>("Error, pago ya existe", "");
         }
     }
     

@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- *
+ * Clase encargada de devolver una instancia de Connection a partir de las credenciales en config.properties
  * @author mynordma
  */
 public class Conexion {

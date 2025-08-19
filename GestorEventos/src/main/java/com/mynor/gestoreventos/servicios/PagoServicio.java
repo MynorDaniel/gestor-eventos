@@ -10,7 +10,8 @@ import com.mynor.gestoreventos.persistencia.InscripcionDB;
 import com.mynor.gestoreventos.persistencia.PagoDB;
 
 /**
- *
+ * Clase que recibe parametros sin procesar desde el usuario, los valida y arma los modelos para
+ * realizar peticiones a PagoDB
  * @author mynordma
  */
 public class PagoServicio {
@@ -29,7 +30,7 @@ public class PagoServicio {
             return new Resultado<>("Correo del participante invalido", "");
         }else if(!(new InscripcionDB().existeInscripcion(codigoEvento, correoParticipante))){
             return new Resultado<>("No existe la inscripcion", "");
-        }else if(codigoEvento.isEmpty()){
+        }else if(codigoEvento.trim().isEmpty()){
             return new Resultado<>("Codigo invalido", "");
         }
         
